@@ -6,8 +6,8 @@ console.info("Test");
 
 import Alt from "alt";
 import chromeDebug from "alt/utils/chromeDebug";
-import immutableStore from "alt/utils/ImmutableUtil";
-import {Record} from "immutable";
+import immutable from "alt/utils/ImmutableUtil";
+import {Record} from "typed-immutable";
 
 const alt = new Alt();
 try {
@@ -28,15 +28,20 @@ class TestStore {
     constructor() {
         this.bindActions(testActions);
         this.count = 0;
+        this.state = Record({
+            count: Number(1)
+        })()
     }
 
     onTest() {
-        this.count++;
+        this.setState(
+            this.state.set("count", this.state.count + 1)
+        );
     }
 }
 
 const testStore = alt.createStore(
-    TestStore, "Test Store"
+    immutable(TestStore), "Test Store"
 );
 
 self.onmessage = (msg) => {
